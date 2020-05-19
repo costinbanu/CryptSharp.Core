@@ -18,10 +18,10 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #endregion
 
 using System;
-using CryptSharp.Internal;
-using CryptSharp.Utility;
+using CryptSharp.Core.Internal;
+using CryptSharp.Core.Utility;
 
-namespace CryptSharp
+namespace CryptSharp.Core
 {
     /// <summary>
     /// The key type for options.

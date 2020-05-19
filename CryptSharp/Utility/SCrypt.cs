@@ -20,9 +20,9 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 using System;
 using System.Security.Cryptography;
 using System.Threading;
-using CryptSharp.Internal;
+using CryptSharp.Core.Internal;
 
-namespace CryptSharp.Utility
+namespace CryptSharp.Core.Utility
 {
     // See http://www.tarsnap.com/scrypt/scrypt.pdf for algorithm details.
     // TODO: Test on a big-endian machine. Do any exist with .NET implementations?

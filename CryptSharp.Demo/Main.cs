@@ -19,7 +19,7 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 using System;
 
-namespace CryptSharp.Demo
+namespace CryptSharp.Core.Demo
 {
 	class MainClass
 	{
@@ -34,13 +34,13 @@ namespace CryptSharp.Demo
             Console.WriteLine();
 
             Console.WriteLine("Now a simple BCrypt demo.");
-			string crypt = CryptSharp.Crypter.Blowfish.GenerateSalt();
+			string crypt = Crypter.Blowfish.GenerateSalt();
 			Console.WriteLine("Our salt is: {0}", crypt);
 
             for (int i = 0; i < 10; i ++) 
 			{
                 // Try this against PHP's crypt('password', 'output of this function').
-				crypt = CryptSharp.Crypter.Blowfish.Crypt("Hello World!", crypt);
+				crypt = Crypter.Blowfish.Crypt("Hello World!", crypt);
 				Console.WriteLine(crypt);
 			}
 

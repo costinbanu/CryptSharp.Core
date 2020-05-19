@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Properties\" />
+    <ProjectReference Include="..\CryptSharp\CryptSharp.Core.csproj" />
   </ItemGroup>
 
 </Project>

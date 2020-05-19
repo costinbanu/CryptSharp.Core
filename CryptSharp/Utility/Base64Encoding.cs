@@ -17,7 +17,7 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 */
 #endregion
 
-namespace CryptSharp.Utility
+namespace CryptSharp.Core.Utility
 {
     /// <summary>
     /// Base-64 binary-to-text encodings.

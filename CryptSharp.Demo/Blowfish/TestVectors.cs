@@ -21,9 +21,9 @@ using System;
 using System.IO;
 using System.Reflection;
 using System.Text.RegularExpressions;
-using CryptSharp.Utility;
+using CryptSharp.Core.Utility;
 
-namespace CryptSharp.Demo.BlowfishTest
+namespace CryptSharp.Core.Demo.BlowfishTest
 {
     static class TestVectors
     {

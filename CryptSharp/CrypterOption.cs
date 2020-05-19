@@ -19,7 +19,7 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 using System;
 
-namespace CryptSharp
+namespace CryptSharp.Core
 {
     /// <summary>
     /// Options that modify the crypt operation.

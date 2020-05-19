@@ -18,9 +18,9 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #endregion
 
 using System;
-using CryptSharp.Internal;
+using CryptSharp.Core.Internal;
 
-namespace CryptSharp.Utility
+namespace CryptSharp.Core.Utility
 {
     partial class BaseEncoding
     {

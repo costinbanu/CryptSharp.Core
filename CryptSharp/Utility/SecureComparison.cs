@@ -21,9 +21,9 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Text;
-using CryptSharp.Internal;
+using CryptSharp.Core.Internal;
 
-namespace CryptSharp.Utility
+namespace CryptSharp.Core.Utility
 {
     /// <summary>
     /// Provides comparison methods resistant to timing attack.

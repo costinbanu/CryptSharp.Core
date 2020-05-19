@@ -21,9 +21,9 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Security.Cryptography;
-using CryptSharp.Internal;
+using CryptSharp.Core.Internal;
 
-namespace CryptSharp.Utility
+namespace CryptSharp.Core.Utility
 {
     /// <summary>
     /// Implements the PBKDF2 key derivation function.
@@ -32,7 +32,7 @@ namespace CryptSharp.Utility
     /// <example>
     /// <code title="Computing a Derived Key">
     /// using System.Security.Cryptography;
-    /// using CryptSharp.Utility;
+    /// using CryptSharp.Core.Utility;
     /// 
     /// // Compute a 128-byte derived key using HMAC-SHA256, 1000 iterations, and a given key and salt.
     /// byte[] derivedKey = Pbkdf2.ComputeDerivedKey(new HMACSHA256(key), salt, 1000, 128);
@@ -40,7 +40,7 @@ namespace CryptSharp.Utility
     /// <code title="Creating a Derived Key Stream">
     /// using System.IO;
     /// using System.Security.Cryptography;
-    /// using CryptSharp.Utility;
+    /// using CryptSharp.Core.Utility;
     ///
     /// // Create a stream using HMAC-SHA512, 1000 iterations, and a given key and salt.
     /// Stream derivedKeyStream = new Pbkdf2(new HMACSHA512(key), salt, 1000);

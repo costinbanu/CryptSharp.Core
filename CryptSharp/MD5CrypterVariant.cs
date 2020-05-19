@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace CryptSharp
+namespace CryptSharp.Core
 {
     /// <summary>
     /// Modified versions of the MD5 crypt algorithm.

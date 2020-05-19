@@ -18,9 +18,9 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #endregion
 
 using System;
-using CryptSharp.Internal;
+using CryptSharp.Core.Internal;
 
-namespace CryptSharp.Utility
+namespace CryptSharp.Core.Utility
 {
     // http://dhost.info/pasjagor/des/start.php?id=0 has intermediates that make debugging easy.
     /// <summary>

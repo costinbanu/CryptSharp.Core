@@ -22,9 +22,9 @@ using System.IO;
 using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
-using CryptSharp;
+using CryptSharp.Core;
 
-namespace CryptSharp.Demo.CrypterTest
+namespace CryptSharp.Core.Demo.CrypterTest
 {
     static class TestVectors
     {

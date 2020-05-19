@@ -20,9 +20,9 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using CryptSharp.Internal;
+using CryptSharp.Core.Internal;
 
-namespace CryptSharp
+namespace CryptSharp.Core
 {
     /// <summary>
     /// Stores options for the crypt operation.

@@ -22,9 +22,9 @@ using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
-using CryptSharp.Internal;
+using CryptSharp.Core.Internal;
 
-namespace CryptSharp
+namespace CryptSharp.Core
 {
     /// <summary>
     /// LDAP schemes such as {SHA}.

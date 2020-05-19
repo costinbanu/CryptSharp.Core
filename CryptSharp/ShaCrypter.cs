@@ -21,10 +21,10 @@ using System;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
-using CryptSharp.Internal;
-using CryptSharp.Utility;
+using CryptSharp.Core.Internal;
+using CryptSharp.Core.Utility;
 
-namespace CryptSharp
+namespace CryptSharp.Core
 {
     // See http://www.akkadia.org/drepper/SHA-crypt.txt for algorithm details.
     /// <summary>

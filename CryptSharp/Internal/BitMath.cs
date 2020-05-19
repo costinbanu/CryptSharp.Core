@@ -17,7 +17,7 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 */
 #endregion
 
-namespace CryptSharp.Internal
+namespace CryptSharp.Core.Internal
 {
     static class BitMath
     {

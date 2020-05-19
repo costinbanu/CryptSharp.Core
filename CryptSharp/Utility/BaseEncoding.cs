@@ -20,9 +20,9 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 using System;
 using System.Collections.Generic;
 using System.Text;
-using CryptSharp.Internal;
+using CryptSharp.Core.Internal;
 
-namespace CryptSharp.Utility
+namespace CryptSharp.Core.Utility
 {
     /// <summary>
     /// A callback to map arbitrary characters onto the characters that can be decoded.

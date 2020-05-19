@@ -22,9 +22,9 @@ using System.IO;
 using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
-using CryptSharp.Utility;
+using CryptSharp.Core.Utility;
 
-namespace CryptSharp.Demo.Pbkdf2Test
+namespace CryptSharp.Core.Demo.Pbkdf2Test
 {
     static class TestVectors
     {

@@ -19,7 +19,7 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 using System.Collections.Generic;
 
-namespace CryptSharp.Utility
+namespace CryptSharp.Core.Utility
 {
     /// <summary>
     /// Base-32 binary to text encodings.

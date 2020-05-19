@@ -19,9 +19,9 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 using System;
 using System.Text;
-using CryptSharp.Utility;
+using CryptSharp.Core.Utility;
 
-namespace CryptSharp.Demo.BaseEncoding
+namespace CryptSharp.Core.Demo.BaseEncoding
 {
     static class TestVectors
     {

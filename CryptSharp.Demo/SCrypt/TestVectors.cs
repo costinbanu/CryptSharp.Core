@@ -19,9 +19,9 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 using System;
 using System.Text;
-using CryptSharp.Utility;
+using CryptSharp.Core.Utility;
 
-namespace CryptSharp.Demo.SCryptTest
+namespace CryptSharp.Core.Demo.SCryptTest
 {
     // Data Source: http://www.tarsnap.com/scrypt/scrypt.pdf Appendix B
     static class TestVectors

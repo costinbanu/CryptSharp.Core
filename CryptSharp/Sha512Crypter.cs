@@ -20,7 +20,7 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 using System.Security.Cryptography;
 using System.Text.RegularExpressions;
 
-namespace CryptSharp
+namespace CryptSharp.Core
 {
     /// <summary>
     /// SHA512 crypt. A reasonable choice if you cannot use Blowfish crypt for policy reasons.

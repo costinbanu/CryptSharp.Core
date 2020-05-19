@@ -19,9 +19,9 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 using System;
 using System.Text;
-using CryptSharp.Internal;
+using CryptSharp.Core.Internal;
 
-namespace CryptSharp
+namespace CryptSharp.Core
 {
     /// <summary>
     /// Crypts and verifies passwords. The main class for most uses of this library.
@@ -29,20 +29,20 @@ namespace CryptSharp
     /// 
     /// <example>
     /// <code title="Crypting a Password">
-    /// using CryptSharp;
+    /// using CryptSharp.Core;
     /// 
     /// // Crypt using the Blowfish crypt ("BCrypt") algorithm.
     /// string cryptedPassword = Crypter.Blowfish.Crypt(password);
     /// </code>
     /// <code title="Checking a Password">
-    /// using CryptSharp;
+    /// using CryptSharp.Core;
     /// 
     /// // Do the passwords match?
     /// // You can also check a password using the Crypt method, but this approach way is easier.
     /// bool matches = Crypter.CheckPassword(testPassword, cryptedPassword);
     /// </code>
     /// <code title="Specifying Options">
-    /// using CryptSharp;
+    /// using CryptSharp.Core;
     /// 
     /// // Specify the $apr1$ Apache htpasswd variant of the MD5 crypt algorithm.
     /// string cryptedPassword = Crypter.MD5.Crypt(password, new CrypterOptions()

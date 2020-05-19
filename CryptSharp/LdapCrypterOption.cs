@@ -17,7 +17,7 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 */
 #endregion
 
-namespace CryptSharp
+namespace CryptSharp.Core
 {
     /// <summary>
     /// Options that modify the LDAP crypt operation.
