@@ -1,0 +1,46 @@
+2.1.0 (December 2, 2014):
+  Added SHA256, SHA384, and SHA512 LDAP schemes.
+  Fixed Drupal 7+ crypt.
+  
+2.0.0 (May 8, 2013):
+  Documentation! The meaning of methods, no longer a mystery...
+  
+  Crypt features:
+  Added support for the 2x and 2y Blowfish prefixes.
+  Added LDAP schemes such as Apache htpasswd's {SHA}.
+  Added MD5 crypt and the Apache htpasswd variant.
+  Added PHPass crypt, as seen in WordPress. Variants for phpBB and Drupal 7+ are also included.
+  Added SHA256 and SHA512 crypt, as seen in Linux.
+  Added Traditional and Extended DES crypt for completeness's sake.
+  CryptSharp is now feature-complete for common crypt and htpasswd methods.
+  
+  Utilities:
+  BaseEncoding performs generic binary-to-text encoding.
+  Made the Pbkdf2 class easier to use.
+  Optimized the SCrypt code. It is now 50% faster.
+  SecureComparison implements timing-insensitive string comparison.
+  
+  Miscellaneous:
+  I now code-sign the CryptSharp DLL so you can confirm it is unaltered.
+
+1.2.0 (January 23, 2011):
+  The SCrypt KDF is now supported as CryptSharp.Utility.SCrypt.
+  Added djb's Salsa20, required by SCrypt.
+  
+1.1.1 (January 22, 2011):
+  BCrypt can now use magic strings other than the default.
+  
+1.1.0 (January 21, 2011):
+	Added a PBKDF2 implementation that can run against arbitrary HMACs. I will use this for SCrypt support soon.
+	The BCrypt password length limit was needlessly short. It is now fully compatible with PHP crypt.
+	The demo now checks Blowfish and PBKDF2 (SHA1) against official test vectors.
+	The demo also checks BCrypt against 400 crypts length 0-100 randomly generated with PHP.
+
+1.0.0 (November 7, 2010):
+	Initial release.
+	
+If you have any questions, comments, or run into any problems, don't hesitate to send me an e-mail at jfb@zer7.com or visit the CryptSharp website at http://www.zer7.com/software/cryptsharp
+
+Thanks and enjoy the library!
+
+James
