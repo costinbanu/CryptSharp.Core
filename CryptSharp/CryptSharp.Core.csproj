@@ -1,16 +1,17 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFrameworks>netstandard2.1;netcoreapp3.1</TargetFrameworks>
     <LangVersion>8.0</LangVersion>
     <PackageId>CryptSharp.Core</PackageId>
-    <Version>1.0.0</Version>
+    <Version>1.1.0</Version>
     <Authors>Costin Banu</Authors>
     <Description>A netcore variant of the CryptSharpOfficial library</Description>
     <PackageLicenseExpression>ISC</PackageLicenseExpression>
     <RepositoryUrl>https://github.com/costinbanu/CryptSharp.Core</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageProjectUrl>https://github.com/costinbanu/CryptSharp.Core</PackageProjectUrl>
+    <PackageReleaseNotes>Added support for netstandard 2.1</PackageReleaseNotes>
   </PropertyGroup>
 
 </Project>
