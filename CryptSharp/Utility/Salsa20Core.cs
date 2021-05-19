@@ -28,7 +28,7 @@ namespace CryptSharp.Core.Utility
     /// </summary>
     public static class Salsa20Core
     {
-        static uint R(uint a, int b) { return (a << b) | (a >> (32 - b)); }
+        private static uint R(uint a, int b) { return (a << b) | (a >> (32 - b)); }
 
         /// <summary>
         /// Applies the Salsa20 hash function.

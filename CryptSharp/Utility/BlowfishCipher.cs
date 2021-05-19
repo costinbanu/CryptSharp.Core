@@ -36,8 +36,9 @@ namespace CryptSharp.Core.Utility
     /// </summary>
 	public partial class BlowfishCipher : IDisposable
 	{
-		static byte[] _zeroSalt = new byte[16];
-		uint[] P; uint[][] S;
+        private static readonly byte[] _zeroSalt = new byte[16];
+        private uint[] P;
+        private uint[][] S;
 
         static BlowfishCipher()
         {
@@ -48,19 +49,19 @@ namespace CryptSharp.Core.Utility
             for (int i = 0; i < Magic.Length; i++) { Magic[i] = BitPacking.UInt32FromBEBytes(magicBytes, i * 4); }
         }
 
-        static readonly uint[] Magic;
+        private static readonly uint[] Magic;
 
         /// <summary>
         /// The number of bytes returned by <see cref="BlowfishCipher.BCrypt()"/>.
         /// </summary>
         public static int BCryptLength { get { return Magic.Length * 4 - 1; } }
 
-		BlowfishCipher(uint[] p, uint[][] s)
+        private BlowfishCipher(uint[] p, uint[][] s)
 		{
             Clone(p ?? P0, s ?? S0);
 		}
 
-        void Clone(uint[] p, uint[][] s)
+        private void Clone(uint[] p, uint[][] s)
         {
             P = (uint[])p.Clone();
             S = new uint[][] { (uint[])s[0].Clone(), (uint[])s[1].Clone(), (uint[])s[2].Clone(), (uint[])s[3].Clone() };
@@ -84,7 +85,7 @@ namespace CryptSharp.Core.Utility
 		{
 			Check.Length("key", key, 4, 56);
 
-            BlowfishCipher fish = new BlowfishCipher(null, null);
+            BlowfishCipher fish = new(null, null);
 			fish.ExpandKey(key, _zeroSalt, EksBlowfishKeyExpansionFlags.None);
 			return fish;
 		}
@@ -130,7 +131,7 @@ namespace CryptSharp.Core.Utility
 			Check.Length("salt", salt, 16, 16);
 			Check.Range("cost", cost, 4, 31);
 
-            BlowfishCipher fish = new BlowfishCipher(null, null);
+            BlowfishCipher fish = new(null, null);
             fish.ExpandKey(key, salt, flags);
 			for (uint i = 1u << cost; i > 0; i --)
 			{
@@ -176,11 +177,9 @@ namespace CryptSharp.Core.Utility
 		public static byte[] BCrypt(byte[] key, byte[] salt, int cost,
                                     EksBlowfishKeyExpansionFlags flags)
 		{
-            using (BlowfishCipher fish = CreateEks(key, salt, cost, flags))
-            {
-                return fish.BCrypt();
-            }
-		}
+            using BlowfishCipher fish = CreateEks(key, salt, cost, flags);
+            return fish.BCrypt();
+        }
 		
         /// <summary>
         /// Uses the cipher to generate a BCrypt hash.
@@ -212,8 +211,8 @@ namespace CryptSharp.Core.Utility
                 Security.Clear(magicBytes);
             }
 		}
-			
-		void ExpandKey(byte[] key, byte[] salt, EksBlowfishKeyExpansionFlags flags)
+
+        private void ExpandKey(byte[] key, byte[] salt, EksBlowfishKeyExpansionFlags flags)
 		{
 			uint[] p = P; uint[][] s = S;
 			int i, j, k; uint data, datal, datar;
@@ -269,8 +268,8 @@ namespace CryptSharp.Core.Utility
 				}
 			}
 		}
-		
-		uint F(uint x)
+
+        private uint F(uint x)
 		{
 		   uint a, b, c, d; uint y;
 		
@@ -282,13 +281,13 @@ namespace CryptSharp.Core.Utility
 		   x >>= 8;
 		   a = x & 0xff;
 		   y = S[0][a] + S[1][b];
-		   y = y ^ S[2][c];
-		   y = y + S[3][d];
+		   y ^= S[2][c];
+		   y += S[3][d];
 		
 		   return y;
 		}
 
-		static void CheckCipherBuffers
+        private static void CheckCipherBuffers
 			(byte[] inputBuffer, int inputOffset,
 			 byte[] outputBuffer, int outputOffset)
 		{
@@ -340,7 +339,7 @@ namespace CryptSharp.Core.Utility
 			
 			for (i = 0; i < N; i ++)
 			{
-				Xl = Xl ^ P[i];
+				Xl ^= P[i];
 				Xr = F(Xl) ^ Xr;
 				
 				temp = Xl;
@@ -352,8 +351,8 @@ namespace CryptSharp.Core.Utility
 			Xl = Xr;
 			Xr = temp;
 			
-			Xr = Xr ^ P[N];
-			Xl = Xl ^ P[N + 1];
+			Xr ^= P[N];
+			Xl ^= P[N + 1];
 			
 			xl = Xl;
 			xr = Xr;
@@ -403,7 +402,7 @@ namespace CryptSharp.Core.Utility
 			
 			for (i = N + 1; i > 1; i --)
 			{
-				Xl = Xl ^ P[i];
+				Xl ^= P[i];
 				Xr = F(Xl) ^ Xr;
 				
 				temp = Xl;
@@ -415,8 +414,8 @@ namespace CryptSharp.Core.Utility
 			Xl = Xr;
 			Xr = temp;
 			
-			Xr = Xr ^ P[1];
-			Xl = Xl ^ P[0];
+			Xr ^= P[1];
+			Xl ^= P[0];
 			
 			xl = Xl;
 			xr = Xr;
@@ -434,7 +433,7 @@ namespace CryptSharp.Core.Utility
                 {
                     // The bool here is useless, but .NET 2.0 lacked HashSet.
                     // We needn't require .NET 3.5+ for anything else here, so why start now...
-                    Dictionary<uint, bool> test = new Dictionary<uint, bool>();
+                    Dictionary<uint, bool> test = new();
 
                     foreach (uint entry in sbox)
                     {

@@ -21,7 +21,7 @@ using System.Collections.Generic;
 
 namespace CryptSharp.Core
 {
-    partial class Crypter
+    public partial class Crypter
     {
         static Crypter()
         {

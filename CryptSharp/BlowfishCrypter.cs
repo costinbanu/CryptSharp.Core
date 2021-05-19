@@ -29,18 +29,16 @@ namespace CryptSharp.Core
     /// </summary>
     public class BlowfishCrypter : Crypter
     {
-        const int MaxPasswordLength = 72;
-        const int MinRounds = 4;
-        const int MaxRounds = 31;
-
-        static CrypterOptions _properties = new CrypterOptions()
+        private const int MaxPasswordLength = 72;
+        private const int MinRounds = 4;
+        private const int MaxRounds = 31;
+        private static readonly CrypterOptions _properties = new CrypterOptions()
         {
             { CrypterProperty.MaxPasswordLength, MaxPasswordLength },
             { CrypterProperty.MinRounds, MinRounds },
             { CrypterProperty.MaxRounds, MaxRounds }
         }.MakeReadOnly();
-
-        static Regex _regex = new Regex(Regex, RegexOptions.CultureInvariant);
+        private static readonly Regex _regex = new(Regex, RegexOptions.CultureInvariant);
 
         /// <inheritdoc />
         public override string GenerateSalt(CrypterOptions options)
@@ -49,16 +47,13 @@ namespace CryptSharp.Core
 
             int rounds = options.GetValue(CrypterOption.Rounds, 6);
             Check.Range("CrypterOption.Rounds", rounds, MinRounds, MaxRounds);
-
-            string prefix;
-            switch (options.GetValue(CrypterOption.Variant, BlowfishCrypterVariant.Unspecified))
+            string prefix = options.GetValue(CrypterOption.Variant, BlowfishCrypterVariant.Unspecified) switch
             {
-                case BlowfishCrypterVariant.Unspecified: prefix = "$2a$"; break;
-                case BlowfishCrypterVariant.Compatible: prefix = "$2x$"; break;
-                case BlowfishCrypterVariant.Corrected: prefix = "$2y$"; break;
-                default: throw Exceptions.ArgumentOutOfRange("CrypterOption.Variant", "Unknown variant.");
-            }
-
+                BlowfishCrypterVariant.Unspecified => "$2a$",
+                BlowfishCrypterVariant.Compatible => "$2x$",
+                BlowfishCrypterVariant.Corrected => "$2y$",
+                _ => throw Exceptions.ArgumentOutOfRange("CrypterOption.Variant", "Unknown variant."),
+            };
             return prefix
                 + rounds.ToString("00") + '$'
                 + Base64Encoding.Blowfish.GetString(Security.GenerateRandomBytes(16));
@@ -112,7 +107,7 @@ namespace CryptSharp.Core
             }
         }
 
-        byte[] FormatKey(byte[] key)
+        private byte[] FormatKey(byte[] key)
         {
             // In my recent investigations using PHP to generate 8-bit test vectors, I found
             // that PHP (and presumably other implementations based on crypt_blowfish) terminates
@@ -133,7 +128,7 @@ namespace CryptSharp.Core
             get { return _properties; }
         }
 
-        static string Regex
+        private static string Regex
         {
             get { return @"\A(?<prefix>\$2[axy]\$)(?<rounds>[0-9]{2})\$(?<salt>[A-Za-z0-9./]{22})(?<crypt>[A-Za-z0-9./]{"
                 + ((BlowfishCipher.BCryptLength * 8 + 5) / 6).ToString() + @"})?\z"; }

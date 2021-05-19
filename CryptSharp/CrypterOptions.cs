@@ -29,7 +29,7 @@ namespace CryptSharp.Core
     /// </summary>
     public class CrypterOptions : IEnumerable<KeyValuePair<CrypterOptionKey, object>>
     {
-        Dictionary<CrypterOptionKey, object> _options = new Dictionary<CrypterOptionKey, object>();
+        private readonly Dictionary<CrypterOptionKey, object> _options = new();
 
         static CrypterOptions()
         {
@@ -50,7 +50,7 @@ namespace CryptSharp.Core
             _options.Add(key, value);
         }
 
-        void CheckValue(CrypterOptionKey key, object value)
+        private void CheckValue(CrypterOptionKey key, object value)
         {
             Check.Null("key", key);
 
@@ -100,7 +100,7 @@ namespace CryptSharp.Core
         /// <returns>The option's value.</returns>
         public T GetValue<T>(CrypterOptionKey key)
         {
-            return GetValue<T>(key, default(T));
+            return GetValue<T>(key, default);
         }
 
         /// <summary>
@@ -180,7 +180,7 @@ namespace CryptSharp.Core
         }
 
         #region Write Protection
-        void AboutToChange()
+        private void AboutToChange()
         {
             if (IsReadOnly) { throw Exceptions.InvalidOperation(); }
         }

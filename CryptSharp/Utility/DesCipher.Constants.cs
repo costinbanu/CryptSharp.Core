@@ -19,11 +19,10 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 namespace CryptSharp.Core.Utility
 {
-    partial class DesCipher
+    public partial class DesCipher
     {
-        const int N = 16;
-
-        static readonly int[] PC1 = new int[]
+        private const int N = 16;
+        private static readonly int[] PC1 = new int[]
         {
             57,	49,	41,	33,	25,	17,	9,
             1,	58,	50,	42,	34,	26,	18,
@@ -34,16 +33,14 @@ namespace CryptSharp.Core.Utility
             14,	6,	61,	53,	45,	37,	29,
             21,	13,	5,	28,	20,	12,	4
         };
-
-        static readonly int[] Rotations = new int[]
+        private static readonly int[] Rotations = new int[]
         {
             1,
             1, 2, 2, 2, 2, 2, 2,
             1, 2, 2, 2, 2, 2, 2,
             1
         };
-
-        static readonly int[] PC2 = new int[]
+        private static readonly int[] PC2 = new int[]
         {
             14,	17,	11,	24,	1,	5,
             3,	28,	15,	6,	21,	10,
@@ -54,8 +51,7 @@ namespace CryptSharp.Core.Utility
             44,	49,	39,	56,	34, 53,
             46,	42,	50,	36,	29,	32
         };
-
-        static readonly int[] IP = new int[]
+        private static readonly int[] IP = new int[]
         {
             58,	50,	42,	34,	26,	18,	10,	2,
             60,	52,	44,	36,	28,	20,	12,	4,
@@ -66,8 +62,7 @@ namespace CryptSharp.Core.Utility
             61,	53,	45,	37,	29,	21,	13,	5,
             63,	55,	47,	39,	31,	23,	15,	7
         };
-
-        static readonly int[] E = new int[]
+        private static readonly int[] E = new int[]
         {
             32,	1,	2,	3,	4,	5,
             4,	5,	6,	7,	8,	9,
@@ -78,8 +73,7 @@ namespace CryptSharp.Core.Utility
             24,	25,	26,	27,	28,	29,
             28,	29,	30,	31,	32,	1
         };
-
-        static readonly uint[][] S = new uint[][]
+        private static readonly uint[][] S = new uint[][]
         {
             new uint[]
             {
@@ -145,8 +139,7 @@ namespace CryptSharp.Core.Utility
 	 	        2,	1,	14,	7,	4,	10,	8,	13,	15,	12,	9,	0,	3,	5,	6,	11
             }
         };
-
-        static readonly int[] P = new int[]
+        private static readonly int[] P = new int[]
         {
             16,	7,	20,	21,
             29,	12,	28,	17,
@@ -157,8 +150,7 @@ namespace CryptSharp.Core.Utility
             19,	13,	30,	6,
             22,	11,	4,	25
         };
-
-        static readonly int[] FP = new int[]
+        private static readonly int[] FP = new int[]
         {
             40,	8,	48,	16,	56,	24,	64,	32,
             39,	7,	47,	15,	55,	23,	63,	31,

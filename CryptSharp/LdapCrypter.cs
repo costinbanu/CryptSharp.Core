@@ -31,7 +31,7 @@ namespace CryptSharp.Core
     /// </summary>
     public class LdapCrypter : Crypter
     {
-        static readonly Dictionary<LdapCrypterVariant, Regex> _regexes = new Dictionary<LdapCrypterVariant, Regex>()
+        private static readonly Dictionary<LdapCrypterVariant, Regex> _regexes = new()
         {
             { LdapCrypterVariant.Crypt, CreateRegex(@"\A(?<prefix>{(?i:CRYPT)\})(?<salt>.*)\z") },
             { LdapCrypterVariant.SSha512, CreateSaltedRegex("SSHA512") },
@@ -46,8 +46,7 @@ namespace CryptSharp.Core
             { LdapCrypterVariant.MD5, CreateUnsaltedRegex("MD5") },
             { LdapCrypterVariant.Cleartext, CreateRegex(@"\A(?<prefix>{(?i:CLEARTEXT)\})(?<salt>.*)\z") }
         };
-
-        CrypterEnvironment _environment;
+        private readonly CrypterEnvironment _environment;
 
         static LdapCrypter()
         {
@@ -99,7 +98,7 @@ namespace CryptSharp.Core
             }
         }
 
-        static string GenerateSaltString()
+        private static string GenerateSaltString()
         {
             return Convert.ToBase64String(Security.GenerateRandomBytes(8));
         }
@@ -172,13 +171,13 @@ namespace CryptSharp.Core
             }
         }
 
-        static string UnsaltedCrypt(HashAlgorithm algorithm, byte[] password)
+        private static string UnsaltedCrypt(HashAlgorithm algorithm, byte[] password)
         {
             try
             {
                 algorithm.Initialize();
                 algorithm.TransformBlock(password, 0, password.Length, password, 0);
-                algorithm.TransformFinalBlock(new byte[0], 0, 0);
+                algorithm.TransformFinalBlock(Array.Empty<byte>(), 0, 0);
 
                 string crypt = Convert.ToBase64String(algorithm.Hash);
                 return crypt;
@@ -189,7 +188,7 @@ namespace CryptSharp.Core
             }
         }
 
-        static string SaltedCrypt(HashAlgorithm algorithm, byte[] password, string saltString)
+        private static string SaltedCrypt(HashAlgorithm algorithm, byte[] password, string saltString)
         {
             byte[] salt = null;
 
@@ -208,7 +207,7 @@ namespace CryptSharp.Core
                     algorithm.Initialize();
                     algorithm.TransformBlock(password, 0, password.Length, password, 0);
                     algorithm.TransformBlock(salt, saltOffset, saltLength, salt, saltOffset);
-                    algorithm.TransformFinalBlock(new byte[0], 0, 0);
+                    algorithm.TransformFinalBlock(Array.Empty<byte>(), 0, 0);
 
                     Array.Copy(algorithm.Hash, saltedHash, hashLength);
                     Array.Copy(salt, saltOffset, saltedHash, hashLength, saltLength);
@@ -227,28 +226,28 @@ namespace CryptSharp.Core
             }
         }
 
-        static bool TryConvertFromBase64String(string s, out byte[] bytes)
+        private static bool TryConvertFromBase64String(string s, out byte[] bytes)
         {
             try { bytes = Convert.FromBase64String(s); return true; }
             catch (FormatException) { bytes = null; return false; }
         }
 
-        static Regex CreateRegex(string pattern)
+        private static Regex CreateRegex(string pattern)
         {
             return new Regex(pattern, RegexOptions.CultureInvariant | RegexOptions.Singleline);
         }
 
-        static Regex CreateSaltedRegex(string scheme)
+        private static Regex CreateSaltedRegex(string scheme)
         {
             return CreateRegex(@"\A(?<prefix>{(?i:" + Regex.Escape(scheme) + @")\})(?<salt>[A-Za-z0-9+/]*={0,3})\z");
         }
 
-        static Regex CreateUnsaltedRegex(string scheme)
+        private static Regex CreateUnsaltedRegex(string scheme)
         {
             return CreateRegex(@"\A(?<prefix>{(?i:" + Regex.Escape(scheme) + @")\})[A-Za-z0-9+/]*={0,3}\z");
         }
 
-        static bool TryMatch(string salt, out Match match, out LdapCrypterVariant variant)
+        private static bool TryMatch(string salt, out Match match, out LdapCrypterVariant variant)
         {
             foreach (KeyValuePair<LdapCrypterVariant, Regex> regex in _regexes)
             {

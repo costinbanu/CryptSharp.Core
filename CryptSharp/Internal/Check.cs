@@ -21,7 +21,7 @@ using System;
 
 namespace CryptSharp.Core.Internal
 {
-    static class Check
+    internal static class Check
     {
         public static void Bounds(string valueName, Array value, int offset, int count)
         {

@@ -31,16 +31,14 @@ namespace CryptSharp.Core
     /// </summary>
     public class PhpassCrypter : Crypter
     {
-        const int MinRounds = 7;
-        const int MaxRounds = 30;
-
-        static CrypterOptions _properties = new CrypterOptions()
+        private const int MinRounds = 7;
+        private const int MaxRounds = 30;
+        private static readonly CrypterOptions _properties = new CrypterOptions()
         {
             { CrypterProperty.MinRounds, MinRounds },
             { CrypterProperty.MaxRounds, MaxRounds }
         }.MakeReadOnly();
-
-        static Regex _regex = new Regex(Regex, RegexOptions.CultureInvariant);
+        private static readonly Regex _regex = new(Regex, RegexOptions.CultureInvariant);
 
         /// <inheritdoc />
         public override string GenerateSalt(CrypterOptions options)
@@ -49,16 +47,13 @@ namespace CryptSharp.Core
 
             int rounds = options.GetValue(CrypterOption.Rounds, 14);
             Check.Range("CrypterOption.Rounds", rounds, MinRounds, MaxRounds);
-
-            string prefix;
-            switch (options.GetValue(CrypterOption.Variant, PhpassCrypterVariant.Standard))
+            string prefix = options.GetValue(CrypterOption.Variant, PhpassCrypterVariant.Standard) switch
             {
-                case PhpassCrypterVariant.Standard: prefix = "$P$"; break;
-                case PhpassCrypterVariant.Phpbb: prefix = "$H$"; break;
-                case PhpassCrypterVariant.Drupal: prefix = "$S$"; break;
-                default: throw Exceptions.ArgumentOutOfRange("CrypterOption.Variant", "Unknown variant.");
-            }
-
+                PhpassCrypterVariant.Standard => "$P$",
+                PhpassCrypterVariant.Phpbb => "$H$",
+                PhpassCrypterVariant.Drupal => "$S$",
+                _ => throw Exceptions.ArgumentOutOfRange("CrypterOption.Variant", "Unknown variant."),
+            };
             return prefix
                 + Base64Encoding.UnixMD5.GetChar(rounds)
                 + Base64Encoding.UnixMD5.GetString(Security.GenerateRandomBytes(6));
@@ -127,7 +122,7 @@ namespace CryptSharp.Core
             }
         }
 
-        byte[] Crypt(byte[] key, byte[] salt, int rounds, HashAlgorithm A)
+        private byte[] Crypt(byte[] key, byte[] salt, int rounds, HashAlgorithm A)
         {
             byte[] H = null;
 
@@ -159,14 +154,14 @@ namespace CryptSharp.Core
             }
         }
 
-        void AddToDigest(HashAlgorithm algorithm, byte[] buffer)
+        private void AddToDigest(HashAlgorithm algorithm, byte[] buffer)
         {
             algorithm.TransformBlock(buffer, 0, buffer.Length, buffer, 0);
         }
 
-        void FinishDigest(HashAlgorithm algorithm)
+        private void FinishDigest(HashAlgorithm algorithm)
         {
-            algorithm.TransformFinalBlock(new byte[0], 0, 0);
+            algorithm.TransformFinalBlock(Array.Empty<byte>(), 0, 0);
         }
 
         /// <inheritdoc />
@@ -175,7 +170,7 @@ namespace CryptSharp.Core
             get { return _properties; }
         }
 
-        static string Regex
+        private static string Regex
         {
             get { return @"\A(?<prefix>\$[PHS]\$)(?<rounds>[A-Za-z0-9./])(?<salt>[A-Za-z0-9./]{8})(?<crypt>[A-Za-z0-9./]{22,86})?\z"; }
         }

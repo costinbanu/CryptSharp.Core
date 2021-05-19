@@ -22,7 +22,7 @@ using System.Security.Cryptography;
 
 namespace CryptSharp.Core.Internal
 {
-	static class Security
+    internal static class Security
     {
         public static void Clear(Array array)
         {

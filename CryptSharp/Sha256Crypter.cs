@@ -27,7 +27,7 @@ namespace CryptSharp.Core
     /// </summary>
     public class Sha256Crypter : ShaCrypter
     {
-        static readonly Regex _regex = CreateDefaultRegex("$5$", 43);
+        private static readonly Regex _regex = CreateDefaultRegex("$5$", 43);
 
         protected override HashAlgorithm CreateHashAlgorithm()
         {

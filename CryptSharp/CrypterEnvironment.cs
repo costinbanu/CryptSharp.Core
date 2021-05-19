@@ -160,16 +160,16 @@ namespace CryptSharp.Core
         #endregion
 
         #region CrypterCollection
-        sealed class CrypterCollection : IList<Crypter>
+        private sealed class CrypterCollection : IList<Crypter>
         {
-            List<Crypter> _crypters = new List<Crypter>();
+            private readonly List<Crypter> _crypters = new();
 
             public CrypterCollection()
             {
                 Clear();
             }
 
-            void AboutToChange()
+            private void AboutToChange()
             {
                 if (IsReadOnly) { throw Exceptions.InvalidOperation(); }
             }

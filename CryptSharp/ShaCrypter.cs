@@ -32,10 +32,9 @@ namespace CryptSharp.Core
     /// </summary>
     public abstract class ShaCrypter : Crypter
     {
-        const int MinRounds = 1000;
-        const int MaxRounds = 999999999;
-
-        static CrypterOptions _properties = new CrypterOptions()
+        private const int MinRounds = 1000;
+        private const int MaxRounds = 999999999;
+        private static readonly CrypterOptions _properties = new CrypterOptions()
         {
             { CrypterProperty.MinRounds, MinRounds },
             { CrypterProperty.MaxRounds, MaxRounds }
@@ -106,7 +105,7 @@ namespace CryptSharp.Core
             }
         }
 
-        byte[] Crypt(byte[] key, byte[] salt, int rounds, HashAlgorithm A)
+        private byte[] Crypt(byte[] key, byte[] salt, int rounds, HashAlgorithm A)
         {
             byte[] P = null, S = null, H = null, I = null;
 
@@ -208,17 +207,17 @@ namespace CryptSharp.Core
             return new Regex(regex, RegexOptions.CultureInvariant);
         }
 
-        static void AddToDigest(HashAlgorithm algorithm, byte[] buffer)
+        private static void AddToDigest(HashAlgorithm algorithm, byte[] buffer)
         {
             AddToDigest(algorithm, buffer, 0, buffer.Length);
         }
 
-        static void AddToDigest(HashAlgorithm algorithm, byte[] buffer, int offset, int count)
+        private static void AddToDigest(HashAlgorithm algorithm, byte[] buffer, int offset, int count)
         {
             algorithm.TransformBlock(buffer, offset, count, buffer, offset);
         }
 
-        static void AddToDigestRolling(HashAlgorithm algorithm, byte[] buffer, int offset, int inputCount, int outputCount)
+        private static void AddToDigestRolling(HashAlgorithm algorithm, byte[] buffer, int offset, int inputCount, int outputCount)
         {
             int count;
             for (count = 0; count < outputCount; count += inputCount)
@@ -227,7 +226,7 @@ namespace CryptSharp.Core
             }
         }
 
-        static void CopyRolling(byte[] buffer, int offset, int inputCount, byte[] output)
+        private static void CopyRolling(byte[] buffer, int offset, int inputCount, byte[] output)
         {
             int count;
             for (count = 0; count < output.Length; count += inputCount)
@@ -236,12 +235,12 @@ namespace CryptSharp.Core
             }
         }
 
-        static void FinishDigest(HashAlgorithm algorithm)
+        private static void FinishDigest(HashAlgorithm algorithm)
         {
-            algorithm.TransformFinalBlock(new byte[0], 0, 0);
+            algorithm.TransformFinalBlock(Array.Empty<byte>(), 0, 0);
         }
 
-        byte[] FormatKey(byte[] key)
+        private byte[] FormatKey(byte[] key)
         {
             int length = ByteArray.NullTerminatedLength(key, key.Length);
             return ByteArray.TruncateAndCopy(key, length);

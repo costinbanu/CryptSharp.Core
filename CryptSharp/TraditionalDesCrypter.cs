@@ -29,11 +29,9 @@ namespace CryptSharp.Core
     /// </summary>
     public class TraditionalDesCrypter : Crypter
     {
-        const int MaxPasswordLength = 8;
-
-        static readonly Regex _regex = new Regex(Regex, RegexOptions.CultureInvariant);
-
-        static CrypterOptions _properties = new CrypterOptions()
+        private const int MaxPasswordLength = 8;
+        private static readonly Regex _regex = new(Regex, RegexOptions.CultureInvariant);
+        private static readonly CrypterOptions _properties = new CrypterOptions()
         {
             { CrypterProperty.MaxPasswordLength, MaxPasswordLength }
         }.MakeReadOnly();
@@ -99,7 +97,7 @@ namespace CryptSharp.Core
         // NOTE: While debugging test vectors (actually, when trying to eliminate the effects of salting to determine why
         //       my implementation wasn't matching...) I discovered PHP crypt() replaces a zero salt with a one-salt.
         //       I'll do the same for compatibility's sake, since really, DES support is *entirely* for compatibility's sake...
-        static string FilterSalt(string salt)
+        private static string FilterSalt(string salt)
         {
             return salt == ".." ? "/." : salt;
         }
@@ -110,7 +108,7 @@ namespace CryptSharp.Core
             get { return _properties; }
         }
 
-        static string Regex
+        private static string Regex
         {
             get { return @"\A(?<salt>[A-Za-z0-9./]{2})(?<hash>[A-Za-z0-9./]{11})?\z"; }
         }

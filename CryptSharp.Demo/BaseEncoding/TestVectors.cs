@@ -23,7 +23,7 @@ using CryptSharp.Core.Utility;
 
 namespace CryptSharp.Core.Demo.BaseEncoding
 {
-    static class TestVectors
+    internal static class TestVectors
     {
         public static void Test()
         {
@@ -45,7 +45,7 @@ namespace CryptSharp.Core.Demo.BaseEncoding
             TestDone();
         }
 
-        static void TestConversion(Encoding encoding, byte[] testBytes, string expectedString)
+        private static void TestConversion(Encoding encoding, byte[] testBytes, string expectedString)
         {
             Console.Write(".");
 
@@ -76,7 +76,7 @@ namespace CryptSharp.Core.Demo.BaseEncoding
             }
         }
 
-        static void TestDone()
+        private static void TestDone()
         {
             Console.WriteLine("done.");
         }

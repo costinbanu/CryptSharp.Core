@@ -21,7 +21,7 @@ using System;
 
 namespace CryptSharp.Core.Internal
 {
-    static class ByteArray
+    internal static class ByteArray
     {
         public static int NullTerminatedLength(byte[] buffer, int maxLength)
         {

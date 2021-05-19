@@ -19,7 +19,7 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 namespace CryptSharp.Core.Internal
 {
-    static class BitPacking
+    internal static class BitPacking
     {
         public static uint UInt32FromBEBytes(byte[] bytes, int offset)
         {

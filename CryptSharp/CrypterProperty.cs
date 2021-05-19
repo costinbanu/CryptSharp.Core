@@ -27,17 +27,17 @@ namespace CryptSharp.Core
         /// <summary>
         /// The maximum password length. Bytes beyond this length will have no effect.
         /// </summary>
-        public static readonly CrypterOptionKey MaxPasswordLength = new CrypterOptionKey("MaxPasswordLength", typeof(int));
+        public static readonly CrypterOptionKey MaxPasswordLength = new("MaxPasswordLength", typeof(int));
 
         /// <summary>
         /// The minimum number for <see cref="CrypterOption.Rounds"/>.
         /// </summary>
-        public static readonly CrypterOptionKey MinRounds = new CrypterOptionKey("MinRounds", typeof(int));
+        public static readonly CrypterOptionKey MinRounds = new("MinRounds", typeof(int));
 
         /// <summary>
         /// The maximum number for <see cref="CrypterOption.Rounds"/>.
         /// </summary>
-        public static readonly CrypterOptionKey MaxRounds = new CrypterOptionKey("MaxRounds", typeof(int));
+        public static readonly CrypterOptionKey MaxRounds = new("MaxRounds", typeof(int));
 
         protected CrypterProperty()
         {

@@ -28,12 +28,10 @@ namespace CryptSharp.Core
     /// </summary>
     public class ExtendedDesCrypter : Crypter
     {
-        const int MinRounds = 1;
-        const int MaxRounds = (1 << 24) - 1;
-
-        static readonly Regex _regex = new Regex(Regex, RegexOptions.CultureInvariant);
-
-        static CrypterOptions _properties = new CrypterOptions()
+        private const int MinRounds = 1;
+        private const int MaxRounds = (1 << 24) - 1;
+        private static readonly Regex _regex = new(Regex, RegexOptions.CultureInvariant);
+        private static readonly CrypterOptions _properties = new CrypterOptions()
         {
             { CrypterProperty.MinRounds, MinRounds },
             { CrypterProperty.MaxRounds, MaxRounds }
@@ -102,10 +100,8 @@ namespace CryptSharp.Core
                 {
                     if (m != 0)
                     {
-                        using (DesCipher cipher = DesCipher.Create(input))
-                        {
-                            cipher.Encipher(input, 0, input, 0);
-                        }
+                        using DesCipher cipher = DesCipher.Create(input);
+                        cipher.Encipher(input, 0, input, 0);
                     }
 
                     for (int n = 0; n < 8 && n < length - m; n++)
@@ -138,7 +134,7 @@ namespace CryptSharp.Core
             get { return _properties; }
         }
 
-        static string Regex
+        private static string Regex
         {
             get { return @"\A_(?<rounds>[A-Za-z0-9./]{4})(?<salt>[A-Za-z0-9./]{4})(?<hash>[A-Za-z0-9./]{11})?\z"; }
         }

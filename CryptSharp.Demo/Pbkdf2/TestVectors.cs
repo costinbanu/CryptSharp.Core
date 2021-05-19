@@ -26,7 +26,7 @@ using CryptSharp.Core.Utility;
 
 namespace CryptSharp.Core.Demo.Pbkdf2Test
 {
-    static class TestVectors
+    internal static class TestVectors
     {
         public static void Test()
         {
@@ -55,12 +55,12 @@ namespace CryptSharp.Core.Demo.Pbkdf2Test
                   cc 37 d7 f0 34 25 e0 c3");
 
             // The test vector file is generated with PHP 5.5+.
-            TestFile("CryptSharp.Demo.Pbkdf2.TestVectors-PBKDF2.txt");
+            TestFile("CryptSharp.Core.Demo.Pbkdf2.TestVectors-PBKDF2.txt");
 
             Console.WriteLine("done.");
         }
 
-        static void TestSHA1(string password, string salt, int c, int len,
+        private static void TestSHA1(string password, string salt, int c, int len,
             string expected)
         {
             Console.Write(".");
@@ -79,43 +79,39 @@ namespace CryptSharp.Core.Demo.Pbkdf2Test
             if (expected != derived) { Console.WriteLine("WARNING: PBKDF2 failed test ({0} instead of {1})", derived, expected); }
         }
 
-        static void TestFile(string filename)
+        private static void TestFile(string filename)
         {
-            using (Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(filename))
+            using Stream stream = Assembly.GetEntryAssembly().GetManifestResourceStream(filename);
+            using StreamReader reader = new(stream);
+            int startTime = Environment.TickCount;
+
+            string line; int count = 0;
+            while ((line = reader.ReadLine()) != null)
             {
-                using (StreamReader reader = new StreamReader(stream))
+                Console.Write(".");
+
+                string[] parts = line.Split(new[] { ',' }, 4);
+                if (parts.Length != 4) { continue; }
+
+                byte[] key = Convert.FromBase64String(parts[0]);
+                byte[] salt = Convert.FromBase64String(parts[1]);
+                int iterations = int.Parse(parts[2]);
+                byte[] expectedKey = Convert.FromBase64String(parts[3]);
+                byte[] derivedKey = Pbkdf2.ComputeDerivedKey(new HMACSHA256(key), salt, iterations, 128);
+
+                for (int i = 0; i < expectedKey.Length; i++)
                 {
-                    int startTime = Environment.TickCount;
-
-                    string line; int count = 0;
-                    while ((line = reader.ReadLine()) != null)
+                    if (expectedKey[i] != derivedKey[i])
                     {
-                        Console.Write(".");
-
-                        string[] parts = line.Split(new[] { ',' }, 4);
-                        if (parts.Length != 4) { continue; }
-
-                        byte[] key = Convert.FromBase64String(parts[0]);
-                        byte[] salt = Convert.FromBase64String(parts[1]);
-                        int iterations = int.Parse(parts[2]);
-                        byte[] expectedKey = Convert.FromBase64String(parts[3]);
-                        byte[] derivedKey = Pbkdf2.ComputeDerivedKey(new HMACSHA256(key), salt, iterations, 128);
-
-                        for (int i = 0; i < expectedKey.Length; i++)
-                        {
-                            if (expectedKey[i] != derivedKey[i])
-                            {
-                                Console.WriteLine("PBKDF2 entry #{0} does not match.", count + 1);
-                                break;
-                            }
-                        }
-
-                        count++;
+                        Console.WriteLine("PBKDF2 entry #{0} does not match.", count + 1);
+                        break;
                     }
-
-                    Console.Write("...({0} ms for {1} vectors)...", Environment.TickCount - startTime, count);
                 }
+
+                count++;
             }
+
+            Console.Write("...({0} ms for {1} vectors)...", Environment.TickCount - startTime, count);
         }
     }
 }

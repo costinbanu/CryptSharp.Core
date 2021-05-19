@@ -33,7 +33,7 @@ namespace CryptSharp.Core.Utility
     /// </summary>
     public static class SCrypt
     {
-        const int hLen = 32;
+        private const int hLen = 32;
 
         /// <summary>
         /// Computes a derived key.
@@ -68,10 +68,8 @@ namespace CryptSharp.Core.Utility
         {
             Check.Range("derivedKeyLength", derivedKeyLength, 0, int.MaxValue);
 
-            using (Pbkdf2 kdf = GetStream(key, salt, cost, blockSize, parallel, maxThreads))
-            {
-                return kdf.Read(derivedKeyLength);
-            }
+            using Pbkdf2 kdf = GetStream(key, salt, cost, blockSize, parallel, maxThreads);
+            return kdf.Read(derivedKeyLength);
         }
 
         /// <summary>
@@ -138,11 +136,11 @@ namespace CryptSharp.Core.Utility
                                        int cost, int blockSize, int parallel, int? maxThreads)
         {
             byte[] B = GetEffectivePbkdf2Salt(key, salt, cost, blockSize, parallel, maxThreads);
-            Pbkdf2 kdf = new Pbkdf2(new HMACSHA256(key), B, 1);
+            Pbkdf2 kdf = new(new HMACSHA256(key), B, 1);
             Security.Clear(B); return kdf;
         }
 
-        static byte[] MFcrypt(byte[] P, byte[] S,
+        private static byte[] MFcrypt(byte[] P, byte[] S,
                               int cost, int blockSize, int parallel, int? maxThreads)
         {
             int MFLen = blockSize * 128;
@@ -165,7 +163,7 @@ namespace CryptSharp.Core.Utility
             return B;
         }
 
-        static void ThreadSMixCalls(uint[] B0, int MFLen,
+        private static void ThreadSMixCalls(uint[] B0, int MFLen,
                                     int cost, int blockSize, int parallel, int maxThreads)
         {
             int current = 0;
@@ -187,7 +185,7 @@ namespace CryptSharp.Core.Utility
             for (int i = 0; i < threads.Length; i++) { threads[i].Join(); }
         }
 
-        static void SMix(uint[] B, int Boffset, uint[] Bp, int Bpoffset, uint N, int r)
+        private static void SMix(uint[] B, int Boffset, uint[] Bp, int Bpoffset, uint N, int r)
         {
             uint Nmask = N - 1; int Bs = 16 * 2 * r;
             uint[] scratch1 = new uint[16];
@@ -217,7 +215,7 @@ namespace CryptSharp.Core.Utility
             Security.Clear(scratch1);
         }
 
-        static void BlockMix
+        private static void BlockMix
             (uint[] B,        // 16*2*r
              int    Boffset,
              uint[] Bp,       // 16*2*r

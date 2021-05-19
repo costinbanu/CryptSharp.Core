@@ -22,7 +22,7 @@ using CryptSharp.Core.Internal;
 
 namespace CryptSharp.Core.Utility
 {
-    partial class BaseEncoding
+    public partial class BaseEncoding
     {
         /// <inheritdoc />
         public override int GetMaxCharCount(int byteCount)

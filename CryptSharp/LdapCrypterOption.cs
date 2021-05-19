@@ -27,12 +27,12 @@ namespace CryptSharp.Core
         /// <summary>
         /// The crypter to use with <see cref="LdapCrypterVariant.Crypt"/>.
         /// </summary>
-        public static readonly CrypterOptionKey Crypter = new CrypterOptionKey("Crypter", typeof(Crypter));
+        public static readonly CrypterOptionKey Crypter = new("Crypter", typeof(Crypter));
 
         /// <summary>
         /// The options to pass to the crypter specified by <see cref="LdapCrypterOption.Crypter"/>.
         /// </summary>
-        public static readonly CrypterOptionKey CrypterOptions = new CrypterOptionKey("CrypterOptions", typeof(CrypterOptions));
+        public static readonly CrypterOptionKey CrypterOptions = new("CrypterOptions", typeof(CrypterOptions));
 
         protected LdapCrypterOption()
         {

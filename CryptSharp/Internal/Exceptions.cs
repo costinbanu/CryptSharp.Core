@@ -21,7 +21,7 @@ using System;
 
 namespace CryptSharp.Core.Internal
 {
-    static class Exceptions
+    internal static class Exceptions
     {
         public static ArgumentException Argument
             (string valueName, string message, params object[] args)
@@ -53,7 +53,7 @@ namespace CryptSharp.Core.Internal
 
         public static InvalidOperationException InvalidOperation()
         {
-            InvalidOperationException e = new InvalidOperationException();
+            InvalidOperationException e = new();
             return e;
         }
 

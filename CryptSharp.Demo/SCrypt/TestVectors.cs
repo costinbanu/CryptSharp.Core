@@ -24,9 +24,9 @@ using CryptSharp.Core.Utility;
 namespace CryptSharp.Core.Demo.SCryptTest
 {
     // Data Source: http://www.tarsnap.com/scrypt/scrypt.pdf Appendix B
-    static class TestVectors
+    internal static class TestVectors
     {
-        static void TestOne(string password, string salt, int N,
+        private static void TestOne(string password, string salt, int N,
             int r, int p, int len, string expected)
         {
             Console.Write(".");

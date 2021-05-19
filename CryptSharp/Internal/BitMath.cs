@@ -19,7 +19,7 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 namespace CryptSharp.Core.Internal
 {
-    static class BitMath
+    internal static class BitMath
     {
         public static int CountLeadingZeros(int value)
         {

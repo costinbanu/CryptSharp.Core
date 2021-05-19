@@ -29,12 +29,12 @@ namespace CryptSharp.Core
         /// <summary>
         /// The number of rounds to iterate.
         /// </summary>
-        public static readonly CrypterOptionKey Rounds = new CrypterOptionKey("Rounds", typeof(int));
+        public static readonly CrypterOptionKey Rounds = new("Rounds", typeof(int));
 
         /// <summary>
         /// The variant of the crypt algorithm to use.
         /// </summary>
-        public static readonly CrypterOptionKey Variant = new CrypterOptionKey("Variant", typeof(Enum));
+        public static readonly CrypterOptionKey Variant = new("Variant", typeof(Enum));
 
         protected CrypterOption()
         {

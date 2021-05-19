@@ -28,11 +28,11 @@ namespace CryptSharp.Core.Utility
     /// </summary>
     public partial class DesCipher : IDisposable
     {
-        static uint R(uint a, int b) { return ((a << b) & 0xfffffff) | (a >> (28 - b)); }
+        private static uint R(uint a, int b) { return ((a << b) & 0xfffffff) | (a >> (28 - b)); }
 
-        ulong[] Kex;
+        private ulong[] Kex;
 
-        DesCipher()
+        private DesCipher()
         {
 
         }
@@ -54,13 +54,13 @@ namespace CryptSharp.Core.Utility
         {
             Check.Length("key", key, 8, 8);
 
-            DesCipher cipher = new DesCipher();
+            DesCipher cipher = new();
             cipher.ExpandKey(key);
 
             return cipher;
         }
 
-        static void CheckCipherBuffers
+        private static void CheckCipherBuffers
             (byte[] inputBuffer, int inputOffset,
              byte[] outputBuffer, int outputOffset)
         {
@@ -132,7 +132,7 @@ namespace CryptSharp.Core.Utility
             DesEnd(buffer, offset, ref L, ref R);
         }
 
-        void DesBegin(byte[] inputBuffer, int inputOffset, out uint L, out uint R)
+        private void DesBegin(byte[] inputBuffer, int inputOffset, out uint L, out uint R)
         {
             ulong p = BitPacking.UInt64FromBEBytes(inputBuffer, inputOffset);
             ulong pp = Permute(IP, p, 64); p = 0;
@@ -140,7 +140,7 @@ namespace CryptSharp.Core.Utility
             L = (uint)(pp >> 32);  R = (uint)pp;
         }
 
-        void DesRound(int i, int reversedSalt, ref uint L, ref uint R)
+        private void DesRound(int i, int reversedSalt, ref uint L, ref uint R)
         {
             uint f = F(R, Kex[i], reversedSalt);
 
@@ -149,7 +149,7 @@ namespace CryptSharp.Core.Utility
             L = temp; temp = 0;
         }
 
-        static uint F(uint R, ulong K, int reversedSalt)
+        private static uint F(uint R, ulong K, int reversedSalt)
         {
             ulong ER = Permute(E, R, 32); R = 0; Salt(ref ER, reversedSalt);
             ulong KER = ER ^ K;
@@ -168,7 +168,7 @@ namespace CryptSharp.Core.Utility
             SKER = 0; return f;
         }
 
-        void DesEnd(byte[] outputBuffer, int outputOffset, ref uint L, ref uint R)
+        private void DesEnd(byte[] outputBuffer, int outputOffset, ref uint L, ref uint R)
         {
             ulong rl = (ulong)R << 32 | L; L = 0; R = 0;
             ulong rlp = Permute(FP, rl, 64); rl = 0;
@@ -176,7 +176,7 @@ namespace CryptSharp.Core.Utility
             BitPacking.BEBytesFromUInt64(rlp, outputBuffer, outputOffset);
         }
 
-        void ExpandKey(byte[] key)
+        private void ExpandKey(byte[] key)
         {
             Dispose();
 
@@ -208,7 +208,7 @@ namespace CryptSharp.Core.Utility
             Kex = kex;
         }
 
-        static ulong Permute(int[] permutation, ulong input, int inputBits)
+        private static ulong Permute(int[] permutation, ulong input, int inputBits)
         {
             ulong output = 0;
             for (int i = 0; i < permutation.Length; i++)
@@ -218,7 +218,7 @@ namespace CryptSharp.Core.Utility
             return output;
         }
 
-        static void ReverseSalt(ref int salt)
+        private static void ReverseSalt(ref int salt)
         {
             int outputSalt = 0;
             for (int i = 0; i < 24; i++)
@@ -228,7 +228,7 @@ namespace CryptSharp.Core.Utility
             salt = outputSalt;
         }
 
-        static void Salt(ref ulong E, int reversedSalt)
+        private static void Salt(ref ulong E, int reversedSalt)
         {
             ulong initial = E;
             ulong H = (E >> 24) & (ulong)(uint)reversedSalt, L = E & (ulong)(uint)reversedSalt;

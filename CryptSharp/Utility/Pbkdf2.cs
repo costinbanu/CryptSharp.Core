@@ -49,9 +49,9 @@ namespace CryptSharp.Core.Utility
     public class Pbkdf2 : Stream
     {
         #region PBKDF2
-        byte[] _saltBuffer, _digest, _digestT1;
-        KeyedHashAlgorithm _hmacAlgorithm;
-        int _iterations;
+        private readonly byte[] _saltBuffer, _digest, _digestT1;
+        private readonly KeyedHashAlgorithm _hmacAlgorithm;
+        private readonly int _iterations;
 
         /// <summary>
         /// Creates a new PBKDF2 stream.
@@ -118,10 +118,8 @@ namespace CryptSharp.Core.Utility
         {
             Check.Range("derivedKeyLength", derivedKeyLength, 0, int.MaxValue);
 
-            using (Pbkdf2 kdf = new Pbkdf2(hmacAlgorithm, salt, iterations))
-            {
-                return kdf.Read(derivedKeyLength);
-            }
+            using Pbkdf2 kdf = new(hmacAlgorithm, salt, iterations);
+            return kdf.Read(derivedKeyLength);
         }
 
         /// <summary>
@@ -135,7 +133,7 @@ namespace CryptSharp.Core.Utility
             _hmacAlgorithm.Clear();
         }
 
-        void ComputeBlock(uint pos)
+        private void ComputeBlock(uint pos)
         {
             BitPacking.BEBytesFromUInt32(pos, _saltBuffer, _saltBuffer.Length - 4);
             ComputeHmac(_saltBuffer, _digestT1);
@@ -150,17 +148,17 @@ namespace CryptSharp.Core.Utility
             Security.Clear(_digestT1);
         }
 
-        void ComputeHmac(byte[] input, byte[] output)
+        private void ComputeHmac(byte[] input, byte[] output)
         {
             _hmacAlgorithm.Initialize();
             _hmacAlgorithm.TransformBlock(input, 0, input.Length, input, 0);
-            _hmacAlgorithm.TransformFinalBlock(new byte[0], 0, 0);
+            _hmacAlgorithm.TransformFinalBlock(Array.Empty<byte>(), 0, 0);
             Array.Copy(_hmacAlgorithm.Hash, output, output.Length);
         }
         #endregion
 
         #region Stream
-        long _blockStart, _blockEnd, _pos;
+        private long _blockStart, _blockEnd, _pos;
 
         /// <exclude />
         public override void Flush()
@@ -197,16 +195,13 @@ namespace CryptSharp.Core.Utility
         /// <inheritdoc />
         public override long Seek(long offset, SeekOrigin origin)
         {
-            long pos;
-
-            switch (origin)
+            var pos = origin switch
             {
-                case SeekOrigin.Begin: pos = offset; break;
-                case SeekOrigin.Current: pos = Position + offset; break;
-                case SeekOrigin.End: pos = Length + offset; break;
-                default: throw Exceptions.ArgumentOutOfRange("origin", "Unknown seek type.");
-            }
-
+                SeekOrigin.Begin => offset,
+                SeekOrigin.Current => Position + offset,
+                SeekOrigin.End => Length + offset,
+                _ => throw Exceptions.ArgumentOutOfRange("origin", "Unknown seek type."),
+            };
             if (pos < 0) { throw Exceptions.Argument("offset", "Can't seek before the stream start."); }
             Position = pos; return pos;
         }

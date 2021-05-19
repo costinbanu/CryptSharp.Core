@@ -21,7 +21,7 @@ using System;
 
 namespace CryptSharp.Core.Demo
 {
-	class MainClass
+    internal class MainClass
 	{
 		public static void Main(string[] args)
 		{

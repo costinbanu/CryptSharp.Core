@@ -27,7 +27,7 @@ namespace CryptSharp.Core
     /// </summary>
     public class Sha512Crypter : ShaCrypter
     {
-        static readonly Regex _regex = CreateDefaultRegex("$6$", 86);
+        private static readonly Regex _regex = CreateDefaultRegex("$6$", 86);
 
         protected override HashAlgorithm CreateHashAlgorithm()
         {

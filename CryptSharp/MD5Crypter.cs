@@ -35,21 +35,18 @@ namespace CryptSharp.Core
     /// </summary>
     public class MD5Crypter : Crypter
     {
-        static readonly Regex _regex = new Regex(Regex, RegexOptions.CultureInvariant);
+        private static readonly Regex _regex = new(Regex, RegexOptions.CultureInvariant);
 
         /// <inheritdoc />
         public override string GenerateSalt(CrypterOptions options)
         {
             Check.Null("options", options);
-
-            string prefix;
-            switch (options.GetValue(CrypterOption.Variant, MD5CrypterVariant.Standard))
+            string prefix = options.GetValue(CrypterOption.Variant, MD5CrypterVariant.Standard) switch
             {
-                case MD5CrypterVariant.Standard: prefix = "$1$"; break;
-                case MD5CrypterVariant.Apache: prefix = "$apr1$"; break;
-                default: throw Exceptions.ArgumentOutOfRange("CrypterOption.Variant", "Unknown variant.");
-            }
-
+                MD5CrypterVariant.Standard => "$1$",
+                MD5CrypterVariant.Apache => "$apr1$",
+                _ => throw Exceptions.ArgumentOutOfRange("CrypterOption.Variant", "Unknown variant."),
+            };
             return prefix + Base64Encoding.UnixMD5.GetString(Security.GenerateRandomBytes(6));
         }
 
@@ -99,7 +96,7 @@ namespace CryptSharp.Core
             }
         }
 
-        byte[] Crypt(byte[] key, byte[] salt, byte[] prefix, HashAlgorithm A)
+        private byte[] Crypt(byte[] key, byte[] salt, byte[] prefix, HashAlgorithm A)
         {
             byte[] H = null, I = null;
 
@@ -162,17 +159,17 @@ namespace CryptSharp.Core
             }
         }
 
-        void AddToDigest(HashAlgorithm algorithm, byte[] buffer)
+        private void AddToDigest(HashAlgorithm algorithm, byte[] buffer)
         {
             AddToDigest(algorithm, buffer, 0, buffer.Length);
         }
 
-        void AddToDigest(HashAlgorithm algorithm, byte[] buffer, int offset, int count)
+        private void AddToDigest(HashAlgorithm algorithm, byte[] buffer, int offset, int count)
         {
             algorithm.TransformBlock(buffer, offset, count, buffer, offset);
         }
 
-        void AddToDigestRolling(HashAlgorithm algorithm, byte[] buffer, int offset, int inputCount, int outputCount)
+        private void AddToDigestRolling(HashAlgorithm algorithm, byte[] buffer, int offset, int inputCount, int outputCount)
         {
             int count;
             for (count = 0; count < outputCount; count += inputCount)
@@ -181,18 +178,18 @@ namespace CryptSharp.Core
             }
         }
 
-        void FinishDigest(HashAlgorithm algorithm)
+        private void FinishDigest(HashAlgorithm algorithm)
         {
-            algorithm.TransformFinalBlock(new byte[0], 0, 0);
+            algorithm.TransformFinalBlock(Array.Empty<byte>(), 0, 0);
         }
 
-        byte[] FormatKey(byte[] key)
+        private byte[] FormatKey(byte[] key)
         {
             int length = ByteArray.NullTerminatedLength(key, key.Length);
             return ByteArray.TruncateAndCopy(key, length);
         }
 
-        static string Regex
+        private static string Regex
         {
             get { return @"\A(?<prefix>\$(apr)?1\$)(?<salt>[A-Za-z0-9./]{1,99})(\$(?<crypt>[A-Za-z0-9./]{22}))?\z"; }
         }
