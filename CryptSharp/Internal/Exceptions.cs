@@ -27,7 +27,7 @@ namespace CryptSharp.Core.Internal
             (string valueName, string message, params object[] args)
         {
             message = string.Format(message, args);
-            ArgumentException e = valueName == null
+            ArgumentException e = valueName is null
                 ? new ArgumentException(message)
                 : new ArgumentException(message, valueName);
             return e;
@@ -35,7 +35,7 @@ namespace CryptSharp.Core.Internal
 
         public static ArgumentNullException ArgumentNull(string valueName)
         {
-            ArgumentNullException e = valueName == null
+            ArgumentNullException e = valueName is null
                 ? new ArgumentNullException()
                 : new ArgumentNullException(valueName);
             return e;
@@ -45,8 +45,8 @@ namespace CryptSharp.Core.Internal
             (string valueName, string message, params object[] args)
         {
             message = string.Format(message, args);
-            ArgumentOutOfRangeException e = valueName == null
-                ? new ArgumentOutOfRangeException(message, (Exception)null)
+            ArgumentOutOfRangeException e = valueName is null
+                ? new ArgumentOutOfRangeException(message)
                 : new ArgumentOutOfRangeException(valueName, message);
             return e;
         }

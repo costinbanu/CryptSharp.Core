@@ -144,7 +144,7 @@ namespace CryptSharp.Core.Utility
                               int cost, int blockSize, int parallel, int? maxThreads)
         {
             int MFLen = blockSize * 128;
-            if (maxThreads == null) { maxThreads = int.MaxValue; }
+            if (maxThreads is null) { maxThreads = int.MaxValue; }
 
             if (!BitMath.IsPositivePowerOf2(cost))
                 { throw Exceptions.ArgumentOutOfRange("cost", "Cost must be a positive power of 2."); }

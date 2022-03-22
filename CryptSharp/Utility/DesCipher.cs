@@ -30,7 +30,7 @@ namespace CryptSharp.Core.Utility
     {
         private static uint R(uint a, int b) { return ((a << b) & 0xfffffff) | (a >> (28 - b)); }
 
-        private ulong[] Kex;
+        private ulong[]? Kex;
 
         private DesCipher()
         {
@@ -142,7 +142,7 @@ namespace CryptSharp.Core.Utility
 
         private void DesRound(int i, int reversedSalt, ref uint L, ref uint R)
         {
-            uint f = F(R, Kex[i], reversedSalt);
+            uint f = F(R, Kex![i], reversedSalt);
 
             uint temp = R;
             R = L ^ f;

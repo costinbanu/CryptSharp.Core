@@ -49,7 +49,7 @@ namespace CryptSharp.Core.Internal
 
         public static void Null<T>(string valueName, T value)
         {
-            if (value == null)
+            if (value is null)
             {
                 throw Exceptions.ArgumentNull(valueName);
             }

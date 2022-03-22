@@ -38,17 +38,18 @@ namespace CryptSharp.Core
         }.MakeReadOnly();
 
         /// <inheritdoc />
-        public override string GenerateSalt(CrypterOptions options)
+        public override string GenerateSalt(CrypterOptions? options)
         {
             Check.Null("options", options);
 
-            int? rounds = options.GetValue<int?>(CrypterOption.Rounds);
-            if (rounds != null)
+            int? rounds = options!.GetValue<int?>(CrypterOption.Rounds);
+            if (rounds is not null)
             {
                 Check.Range("CrypterOption.Rounds", (int)rounds, MinRounds, MaxRounds);
             }
 
-            byte[] roundsBytes = new byte[3], saltBytes = null;
+            byte[] roundsBytes = new byte[3];
+            byte[]? saltBytes = null;
             try
             {
                 BitPacking.LEBytesFromUInt24((uint)(rounds ?? 4321), roundsBytes, 0);
@@ -82,7 +83,7 @@ namespace CryptSharp.Core
             Match match = _regex.Match(salt);
             if (!match.Success) { throw Exceptions.Argument("salt", "Invalid salt."); }
 
-            byte[] roundsBytes = null, saltBytes = null, crypt = null, input = null;
+            byte[]? roundsBytes = null, saltBytes = null, crypt = null, input = null;
             try
             {
                 string roundsString = match.Groups["rounds"].Value;

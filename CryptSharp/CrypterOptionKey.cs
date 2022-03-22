@@ -48,14 +48,14 @@ namespace CryptSharp.Core
         /// <param name="value">The value to check.</param>
         public void CheckValue(object value)
         {
-            if (value == null)
+            if (value is null)
             {
-                throw Exceptions.ArgumentNull(null);
+                throw Exceptions.ArgumentNull(nameof(value));
             }
 
             if (!ValueType.IsAssignableFrom(value.GetType()))
             {
-                throw Exceptions.Argument(null, "Value is incompatible with type {0}.", ValueType);
+                throw Exceptions.Argument(nameof(value), "Value is incompatible with type {0}.", ValueType);
             }
 
             OnCheckValue(value);

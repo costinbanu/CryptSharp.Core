@@ -81,12 +81,12 @@ namespace CryptSharp.Core.Demo.Pbkdf2Test
 
         private static void TestFile(string filename)
         {
-            using Stream stream = Assembly.GetEntryAssembly().GetManifestResourceStream(filename);
+            using Stream stream = Assembly.GetEntryAssembly()!.GetManifestResourceStream(filename)!;
             using StreamReader reader = new(stream);
             int startTime = Environment.TickCount;
 
             string line; int count = 0;
-            while ((line = reader.ReadLine()) != null)
+            while ((line = reader.ReadLine()!) is not null)
             {
                 Console.Write(".");
 

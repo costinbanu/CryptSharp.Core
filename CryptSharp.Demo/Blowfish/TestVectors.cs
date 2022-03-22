@@ -30,13 +30,11 @@ namespace CryptSharp.Core.Demo.BlowfishTest
         public static void Test()
         {
             Console.Write("Testing Blowfish");
-            using (Stream stream =
-                Assembly.GetEntryAssembly().GetManifestResourceStream
-                ("CryptSharp.Core.Demo.Blowfish.TestVectors.txt"))
+            using (Stream stream = Assembly.GetEntryAssembly()!.GetManifestResourceStream("CryptSharp.Core.Demo.Blowfish.TestVectors.txt")!)
             {
                 using StreamReader reader = new(stream);
                 string line;
-                while ((line = reader.ReadLine()) != null)
+                while ((line = reader.ReadLine()!) is not null)
                 {
                     Match match = Regex.Match(line, @"^([0-9A-z]{16})\s*([0-9A-z]{16})\s*([0-9A-z]{16})$");
                     if (!match.Success) { continue; }

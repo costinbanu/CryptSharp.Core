@@ -153,7 +153,7 @@ namespace CryptSharp.Core.Utility
             _hmacAlgorithm.Initialize();
             _hmacAlgorithm.TransformBlock(input, 0, input.Length, input, 0);
             _hmacAlgorithm.TransformFinalBlock(Array.Empty<byte>(), 0, 0);
-            Array.Copy(_hmacAlgorithm.Hash, output, output.Length);
+            Array.Copy(_hmacAlgorithm.Hash!, output, output.Length);
         }
         #endregion
 
@@ -252,7 +252,7 @@ namespace CryptSharp.Core.Utility
             get { return _pos; }
             set
             {
-                if (_pos < 0) { throw Exceptions.Argument(null, "Can't seek before the stream start."); }
+                if (_pos < 0) { throw Exceptions.Argument(nameof(Position), "Can't seek before the stream start."); }
                 _pos = value;
             }
         }

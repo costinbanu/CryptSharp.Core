@@ -51,7 +51,7 @@ namespace CryptSharp.Core
         {
             Check.Null("password", password);
 
-            byte[] passwordBytes = null;
+            byte[]? passwordBytes = null;
             try
             {
                 passwordBytes = Encoding.UTF8.GetBytes(password);
@@ -74,8 +74,8 @@ namespace CryptSharp.Core
             Check.Null("password", password);
             Check.Null("cryptedPassword", cryptedPassword);
 
-            Crypter crypter = GetCrypter(cryptedPassword);
-            string computedPassword = crypter.Crypt(password, cryptedPassword);
+            Crypter? crypter = GetCrypter(cryptedPassword);
+            string? computedPassword = crypter?.Crypt(password, cryptedPassword);
             return SecureComparison.Equals(computedPassword, cryptedPassword);
         }
 
@@ -85,9 +85,9 @@ namespace CryptSharp.Core
         /// <param name="cryptedPassword">The crypted password or prefix.</param>
         /// <returns>A compatible crypt algorithm.</returns>
         /// <exception cref="ArgumentException">No compatible crypt algorithm was found.</exception>
-        public Crypter GetCrypter(string cryptedPassword)
+        public Crypter? GetCrypter(string cryptedPassword)
         {
-            Crypter crypter;
+            Crypter? crypter;
 
             if (TryGetCrypter(cryptedPassword, out crypter))
             {
@@ -105,7 +105,7 @@ namespace CryptSharp.Core
         /// <param name="cryptedPassword">The crypted password or prefix.</param>
         /// <param name="crypter">A compatible crypt algorithm.</param>
         /// <returns><c>true</c> if a compatible crypt algorithm was found.</returns>
-        public bool TryGetCrypter(string cryptedPassword, out Crypter crypter)
+        public bool TryGetCrypter(string cryptedPassword, out Crypter? crypter)
         {
             Check.Null("cryptedPassword", cryptedPassword);
 
@@ -113,11 +113,13 @@ namespace CryptSharp.Core
             {
                 if (testCrypter.CanCrypt(cryptedPassword))
                 {
-                    crypter = testCrypter; return true;
+                    crypter = testCrypter; 
+                    return true;
                 }
             }
 
-            crypter = null; return false;
+            crypter = null; 
+            return false;
         }
 
         /// <summary>
@@ -247,7 +249,7 @@ namespace CryptSharp.Core
             public Crypter this[int index]
             {
                 get { return _crypters[index]; }
-                set { Check.Null(null, value); AboutToChange(); _crypters[index] = value; }
+                set { Check.Null("value", value); AboutToChange(); _crypters[index] = value; }
             }
         }
         #endregion

@@ -38,10 +38,10 @@ namespace CryptSharp.Core
         private static readonly Regex _regex = new(Regex, RegexOptions.CultureInvariant);
 
         /// <inheritdoc />
-        public override string GenerateSalt(CrypterOptions options)
+        public override string GenerateSalt(CrypterOptions? options)
         {
             Check.Null("options", options);
-            string prefix = options.GetValue(CrypterOption.Variant, MD5CrypterVariant.Standard) switch
+            string prefix = options!.GetValue(CrypterOption.Variant, MD5CrypterVariant.Standard) switch
             {
                 MD5CrypterVariant.Standard => "$1$",
                 MD5CrypterVariant.Apache => "$apr1$",
@@ -68,7 +68,7 @@ namespace CryptSharp.Core
             Match match = _regex.Match(salt);
             if (!match.Success) { throw Exceptions.Argument("salt", "Invalid salt."); }
 
-            byte[] prefixBytes = null, saltBytes = null, formattedKey = null, truncatedSalt = null, crypt = null;
+            byte[]? prefixBytes = null, saltBytes = null, formattedKey = null, truncatedSalt = null, crypt = null;
             try
             {
                 string prefixString = match.Groups["prefix"].Value;
@@ -98,7 +98,7 @@ namespace CryptSharp.Core
 
         private byte[] Crypt(byte[] key, byte[] salt, byte[] prefix, HashAlgorithm A)
         {
-            byte[] H = null, I = null;
+            byte[]? H = null, I = null;
 
             try
             {
@@ -108,7 +108,7 @@ namespace CryptSharp.Core
                 AddToDigest(A, key);
                 FinishDigest(A);
 
-                I = (byte[])A.Hash.Clone();
+                I = (byte[])A.Hash!.Clone();
                 
                 A.Initialize();
                 AddToDigest(A, key);
@@ -125,7 +125,7 @@ namespace CryptSharp.Core
                 }
                 FinishDigest(A);
 
-                H = (byte[])A.Hash.Clone();                
+                H = (byte[])A.Hash!.Clone();                
 
                 for (int i = 0; i < 1000; i++)
                 {

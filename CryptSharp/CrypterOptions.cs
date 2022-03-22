@@ -98,7 +98,7 @@ namespace CryptSharp.Core
         /// <typeparam name="T">The type of the option's value.</typeparam>
         /// <param name="key">The key of the option.</param>
         /// <returns>The option's value.</returns>
-        public T GetValue<T>(CrypterOptionKey key)
+        public T? GetValue<T>(CrypterOptionKey key)
         {
             return GetValue<T>(key, default);
         }
@@ -110,14 +110,14 @@ namespace CryptSharp.Core
         /// <param name="key">The key of the option.</param>
         /// <param name="defaultValue">The default value if the option is not set.</param>
         /// <returns>The option's value.</returns>
-        public T GetValue<T>(CrypterOptionKey key, T defaultValue)
+        public T? GetValue<T>(CrypterOptionKey key, T? defaultValue)
         {
-            object value;
+            object? value;
             if (!TryGetValue(key, out value)) { return defaultValue; }
 
             try
             {
-                return (T)value;
+                return (T?)value;
             }
             catch (InvalidCastException)
             {
@@ -144,7 +144,7 @@ namespace CryptSharp.Core
         /// <param name="key">The key of the option.</param>
         /// <param name="value">The value, or <c>null</c> if the option is not set.</param>
         /// <returns><c>true</c> if the option is set.</returns>
-        public bool TryGetValue(CrypterOptionKey key, out object value)
+        public bool TryGetValue(CrypterOptionKey key, out object? value)
         {
             Check.Null("key", key);
 

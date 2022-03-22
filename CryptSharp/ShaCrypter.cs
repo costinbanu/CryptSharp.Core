@@ -41,18 +41,18 @@ namespace CryptSharp.Core
         }.MakeReadOnly();
 
         /// <inheritdoc />
-        public override string GenerateSalt(CrypterOptions options)
+        public override string GenerateSalt(CrypterOptions? options)
         {
             Check.Null("options", options);
 
-            int? rounds = options.GetValue<int?>(CrypterOption.Rounds);
-            if (rounds != null)
+            int? rounds = options!.GetValue<int?>(CrypterOption.Rounds);
+            if (rounds is not null)
             {
                 Check.Range("CrypterOption.Rounds", (int)rounds, MinRounds, MaxRounds);
             }
 
             return CryptPrefix
-                + (rounds != null ? string.Format("rounds={0}$", rounds) : "")
+                + (rounds is not null ? string.Format("rounds={0}$", rounds) : "")
                 + Base64Encoding.UnixMD5.GetString(Security.GenerateRandomBytes(12));
         }
 
@@ -80,7 +80,7 @@ namespace CryptSharp.Core
             if (rounds < MinRounds) { rounds = MinRounds; }
             if (rounds > MaxRounds) { rounds = MaxRounds; }
 
-            byte[] saltBytes = null, formattedKey = null, truncatedSalt = null, crypt = null;
+            byte[]? saltBytes = null, formattedKey = null, truncatedSalt = null, crypt = null;
             try
             {
                 string saltString = match.Groups["salt"].Value;
@@ -107,7 +107,7 @@ namespace CryptSharp.Core
 
         private byte[] Crypt(byte[] key, byte[] salt, int rounds, HashAlgorithm A)
         {
-            byte[] P = null, S = null, H = null, I = null;
+            byte[]? P = null, S = null, H = null, I = null;
 
             try
             {
@@ -117,7 +117,7 @@ namespace CryptSharp.Core
                 AddToDigest(A, key);
                 FinishDigest(A);
 
-                I = (byte[])A.Hash.Clone();
+                I = (byte[])A.Hash!.Clone();
 
                 A.Initialize();
                 AddToDigest(A, key);

@@ -41,7 +41,7 @@ namespace CryptSharp.Core.Utility
         private readonly string _characters;
         private readonly bool _msbComesFirst;
         private readonly Dictionary<char, int> _values;
-        private readonly BaseEncodingDecodeFilterCallback _decodeFilterCallback;
+        private readonly BaseEncodingDecodeFilterCallback? _decodeFilterCallback;
 
         /// <summary>
         /// Defines a binary-to-text encoding.
@@ -74,8 +74,8 @@ namespace CryptSharp.Core.Utility
         ///     A callback to map arbitrary characters onto the characters that can be decoded.
         /// </param>
         public BaseEncoding(string characterSet, bool msbComesFirst,
-                            IDictionary<char, int> additionalDecodeCharacters,
-                            BaseEncodingDecodeFilterCallback decodeFilterCallback)
+                            IDictionary<char, int>? additionalDecodeCharacters,
+                            BaseEncodingDecodeFilterCallback? decodeFilterCallback)
         {
             Check.Null("characterSet", characterSet);
 
@@ -97,7 +97,7 @@ namespace CryptSharp.Core.Utility
             _msbComesFirst = msbComesFirst;
             _decodeFilterCallback = decodeFilterCallback;
 
-            _values = additionalDecodeCharacters != null
+            _values = additionalDecodeCharacters is not null
                 ? new Dictionary<char, int>(additionalDecodeCharacters)
                 : new Dictionary<char, int>();
             for (int i = 0; i < characterSet.Length; i ++)
@@ -119,7 +119,7 @@ namespace CryptSharp.Core.Utility
         /// <returns>A value, or <c>-1</c> if the character is not part of the encoding.</returns>
         public virtual int GetValue(char character)
         {
-            if (_decodeFilterCallback != null)
+            if (_decodeFilterCallback is not null)
             {
                 character = _decodeFilterCallback(character);
             }

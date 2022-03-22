@@ -66,21 +66,21 @@ namespace CryptSharp.Core
         }
 
         /// <inheritdoc />
-        public override string GenerateSalt(CrypterOptions options)
+        public override string GenerateSalt(CrypterOptions? options)
         {
             Check.Null("options", options);
 
-            switch (options.GetValue(CrypterOption.Variant, LdapCrypterVariant.SSha))
+            switch (options!.GetValue(CrypterOption.Variant, LdapCrypterVariant.SSha))
             {
                 case LdapCrypterVariant.Crypt:
-                    Crypter crypter = options.GetValue<Crypter>(LdapCrypterOption.Crypter);
-                    if (crypter == null)
+                    Crypter? crypter = options.GetValue<Crypter>(LdapCrypterOption.Crypter);
+                    if (crypter is null)
                     {
                         throw Exceptions.Argument("LdapCrypterOption.Crypter",
                                                   "Crypter not set. Did you intend Crypter.TraditionalDes (the slappasswd default)?");
                     }
 
-                    CrypterOptions crypterOptions = options.GetValue(LdapCrypterOption.CrypterOptions, CrypterOptions.None);
+                    CrypterOptions? crypterOptions = options.GetValue(LdapCrypterOption.CrypterOptions, CrypterOptions.None);
                     return "{CRYPT}" + crypter.GenerateSalt(crypterOptions);
 
                 case LdapCrypterVariant.SSha512: return "{SSHA512}" + GenerateSaltString();
@@ -108,9 +108,7 @@ namespace CryptSharp.Core
         {
             Check.Null("salt", salt);
 
-            Match match; LdapCrypterVariant variant;
-            return salt.StartsWith("{") && // Quick out for matching.
-                TryMatch(salt, out match, out variant);
+            return salt.StartsWith("{") && TryMatch(salt, out _, out _);
         }
 
         /// <inheritdoc />
@@ -119,19 +117,29 @@ namespace CryptSharp.Core
             Check.Null("password", password);
             Check.Null("salt", salt);
 
-            Match match; LdapCrypterVariant variant;
-            if (!TryMatch(salt, out match, out variant)) { throw Exceptions.Argument("salt", "Invalid salt."); }
+            Match? match; 
+            LdapCrypterVariant variant;
+            if (!TryMatch(salt, out match, out variant)) 
+            { 
+                throw Exceptions.Argument("salt", "Invalid salt."); 
+            }
 
-            string prefixString = match.Groups["prefix"].Value;
+            string prefixString = match!.Groups["prefix"].Value;
             string saltString = match.Groups["salt"].Value;
 
             switch (variant)
             {
                 case LdapCrypterVariant.Crypt:
-                    Crypter crypter;
-                    if (!_environment.TryGetCrypter(saltString, out crypter)) { goto default; }
-                    if (crypter is LdapCrypter) { throw Exceptions.Argument("salt", "LDAP {CRYPT} tried to use an LDAP scheme."); }
-                    return prefixString + crypter.Crypt(password, saltString);
+                    Crypter? crypter;
+                    if (!_environment.TryGetCrypter(saltString, out crypter)) 
+                    {
+                        throw Exceptions.ArgumentOutOfRange("CrypterOption.Variant", "Unknown variant.");
+                    }
+                    if (crypter is LdapCrypter) 
+                    { 
+                        throw Exceptions.Argument("salt", "LDAP {CRYPT} tried to use an LDAP scheme."); 
+                    }
+                    return prefixString + crypter!.Crypt(password, saltString);
 
                 case LdapCrypterVariant.SSha512:
                     return prefixString + SaltedCrypt(SHA512.Create(), password, saltString);
@@ -179,7 +187,7 @@ namespace CryptSharp.Core
                 algorithm.TransformBlock(password, 0, password.Length, password, 0);
                 algorithm.TransformFinalBlock(Array.Empty<byte>(), 0, 0);
 
-                string crypt = Convert.ToBase64String(algorithm.Hash);
+                string crypt = Convert.ToBase64String(algorithm.Hash!);
                 return crypt;
             }
             finally
@@ -190,15 +198,18 @@ namespace CryptSharp.Core
 
         private static string SaltedCrypt(HashAlgorithm algorithm, byte[] password, string saltString)
         {
-            byte[] salt = null;
+            byte[]? salt = null;
 
             try
             {
-                if (!TryConvertFromBase64String(saltString, out salt)) { throw Exceptions.Argument("salt", "Bad base-64."); }
+                if (!TryConvertFromBase64String(saltString, out salt)) 
+                { 
+                    throw Exceptions.Argument("salt", "Bad base-64."); 
+                }
 
                 // If we're under the hash length, assume we only have the salt.
                 int hashLength = algorithm.HashSize / 8;
-                int saltOffset = salt.Length < hashLength ? 0 : hashLength;
+                int saltOffset = salt!.Length < hashLength ? 0 : hashLength;
                 int saltLength = salt.Length - saltOffset;
 
                 byte[] saltedHash = new byte[hashLength + saltLength];
@@ -209,7 +220,7 @@ namespace CryptSharp.Core
                     algorithm.TransformBlock(salt, saltOffset, saltLength, salt, saltOffset);
                     algorithm.TransformFinalBlock(Array.Empty<byte>(), 0, 0);
 
-                    Array.Copy(algorithm.Hash, saltedHash, hashLength);
+                    Array.Copy(algorithm.Hash!, saltedHash, hashLength);
                     Array.Copy(salt, saltOffset, saltedHash, hashLength, saltLength);
                     string crypt = Convert.ToBase64String(saltedHash);
                     return crypt;
@@ -226,10 +237,18 @@ namespace CryptSharp.Core
             }
         }
 
-        private static bool TryConvertFromBase64String(string s, out byte[] bytes)
+        private static bool TryConvertFromBase64String(string s, out byte[]? bytes)
         {
-            try { bytes = Convert.FromBase64String(s); return true; }
-            catch (FormatException) { bytes = null; return false; }
+            try 
+            { 
+                bytes = Convert.FromBase64String(s);
+                return true; 
+            }
+            catch (FormatException) 
+            { 
+                bytes = null; 
+                return false; 
+            }
         }
 
         private static Regex CreateRegex(string pattern)
@@ -247,7 +266,7 @@ namespace CryptSharp.Core
             return CreateRegex(@"\A(?<prefix>{(?i:" + Regex.Escape(scheme) + @")\})[A-Za-z0-9+/]*={0,3}\z");
         }
 
-        private static bool TryMatch(string salt, out Match match, out LdapCrypterVariant variant)
+        private static bool TryMatch(string salt, out Match? match, out LdapCrypterVariant variant)
         {
             foreach (KeyValuePair<LdapCrypterVariant, Regex> regex in _regexes)
             {
@@ -255,7 +274,9 @@ namespace CryptSharp.Core
                 if (match.Success) { variant = regex.Key; return true; }
             }
 
-            variant = 0; match = null; return false;
+            variant = 0; 
+            match = null; 
+            return false;
         }
     }
 }

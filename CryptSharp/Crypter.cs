@@ -81,7 +81,7 @@ namespace CryptSharp.Core
         /// <param name="cryptedPassword">The crypted password or prefix.</param>
         /// <returns>A compatible crypt algorithm.</returns>
         /// <exception cref="ArgumentException">No compatible crypt algorithm was found.</exception>
-        public static Crypter GetCrypter(string cryptedPassword)
+        public static Crypter? GetCrypter(string cryptedPassword)
         {
             return CrypterEnvironment.Default.GetCrypter(cryptedPassword);
         }
@@ -132,7 +132,7 @@ namespace CryptSharp.Core
             Check.Null("password", password);
             Check.Null("salt", salt);
 
-            byte[] keyBytes = null;
+            byte[]? keyBytes = null;
             try
             {
                 keyBytes = Encoding.UTF8.GetBytes(password);
@@ -223,7 +223,7 @@ namespace CryptSharp.Core
         /// </summary>
         /// <param name="options">Options modifying the salt generation.</param>
         /// <returns>The salt string.</returns>
-        public abstract string GenerateSalt(CrypterOptions options);
+        public abstract string GenerateSalt(CrypterOptions? options);
 
         /// <summary>
         /// Properties inherent to the particular crypt algorithm. These cannot be modified.

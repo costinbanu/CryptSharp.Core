@@ -41,17 +41,17 @@ namespace CryptSharp.Core.Utility
         ///     If the reference string is extremely long, memory caching effects may reveal that fact.
         /// </remarks>
         [MethodImpl(MethodImplOptions.NoInlining | MethodImplOptions.NoOptimization)]
-        public static bool Equals(string potentialAttackerSuppliedString, string referenceString)
+        public static bool Equals(string? potentialAttackerSuppliedString, string? referenceString)
         {
             Check.Null("potentialAttackerSuppliedString", potentialAttackerSuppliedString);
             Check.Null("referenceString", referenceString);
 
-            if (referenceString.Length == 0)
+            if (referenceString!.Length == 0)
             {
-                return potentialAttackerSuppliedString.Length == 0;
+                return potentialAttackerSuppliedString!.Length == 0;
             }
 
-            int attackLength = potentialAttackerSuppliedString.Length;
+            int attackLength = potentialAttackerSuppliedString!.Length;
             int referenceLength = referenceString.Length;
 
             int differences = attackLength ^ referenceLength;

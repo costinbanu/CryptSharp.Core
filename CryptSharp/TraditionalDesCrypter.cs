@@ -37,7 +37,7 @@ namespace CryptSharp.Core
         }.MakeReadOnly();
 
         /// <inheritdoc />
-        public override string GenerateSalt(CrypterOptions options)
+        public override string GenerateSalt(CrypterOptions? options)
         {
             Check.Null("options", options);
 
@@ -64,7 +64,7 @@ namespace CryptSharp.Core
             Match match = _regex.Match(salt);
             if (!match.Success) { throw Exceptions.Argument("salt", "Invalid salt."); }
 
-            byte[] crypt = null, input = null;
+            byte[]? crypt = null, input = null;
             try
             {
                 string saltString = FilterSalt(match.Groups["salt"].Value);

@@ -41,11 +41,11 @@ namespace CryptSharp.Core
         private static readonly Regex _regex = new(Regex, RegexOptions.CultureInvariant);
 
         /// <inheritdoc />
-        public override string GenerateSalt(CrypterOptions options)
+        public override string GenerateSalt(CrypterOptions? options)
         {
             Check.Null("options", options);
 
-            int rounds = options.GetValue(CrypterOption.Rounds, 6);
+            int rounds = options!.GetValue(CrypterOption.Rounds, 6);
             Check.Range("CrypterOption.Rounds", rounds, MinRounds, MaxRounds);
             string prefix = options.GetValue(CrypterOption.Variant, BlowfishCrypterVariant.Unspecified) switch
             {
@@ -78,7 +78,7 @@ namespace CryptSharp.Core
             Match match = _regex.Match(salt);
             if (!match.Success) { throw Exceptions.Argument("salt", "Invalid salt."); }
 
-            byte[] saltBytes = null, formattedKey = null, crypt = null;
+            byte[]? saltBytes = null, formattedKey = null, crypt = null;
             try
             {
                 string prefixString = match.Groups["prefix"].Value;

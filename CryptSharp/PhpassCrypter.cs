@@ -41,11 +41,11 @@ namespace CryptSharp.Core
         private static readonly Regex _regex = new(Regex, RegexOptions.CultureInvariant);
 
         /// <inheritdoc />
-        public override string GenerateSalt(CrypterOptions options)
+        public override string GenerateSalt(CrypterOptions? options)
         {
             Check.Null("options", options);
 
-            int rounds = options.GetValue(CrypterOption.Rounds, 14);
+            int rounds = options!.GetValue(CrypterOption.Rounds, 14);
             Check.Range("CrypterOption.Rounds", rounds, MinRounds, MaxRounds);
             string prefix = options.GetValue(CrypterOption.Variant, PhpassCrypterVariant.Standard) switch
             {
@@ -78,7 +78,7 @@ namespace CryptSharp.Core
             Match match = _regex.Match(salt);
             if (!match.Success) { throw Exceptions.Argument("salt", "Invalid salt."); }
 
-            byte[] saltBytes = null, crypt = null;
+            byte[]? saltBytes = null, crypt = null;
             try
             {
                 string roundsString = match.Groups["rounds"].Value;
@@ -124,7 +124,7 @@ namespace CryptSharp.Core
 
         private byte[] Crypt(byte[] key, byte[] salt, int rounds, HashAlgorithm A)
         {
-            byte[] H = null;
+            byte[]? H = null;
 
             try
             {
@@ -133,19 +133,19 @@ namespace CryptSharp.Core
                 AddToDigest(A, key);
                 FinishDigest(A);
 
-                H = (byte[])A.Hash.Clone();
+                H = (byte[])A.Hash!.Clone();
 
                 for (int i = 0; i < (1 << rounds); i++)
                 {
                     A.Initialize();
-                    AddToDigest(A, H);
+                    AddToDigest(A, H!);
                     AddToDigest(A, key);
                     FinishDigest(A);
 
-                    Array.Copy(A.Hash, H, H.Length);
+                    Array.Copy(A.Hash!, H, H.Length);
                 }
 
-                return (byte[])H.Clone();
+                return (byte[])H!.Clone();
             }
             finally
             {

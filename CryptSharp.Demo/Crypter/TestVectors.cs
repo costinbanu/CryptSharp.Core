@@ -110,14 +110,14 @@ namespace CryptSharp.Core.Demo.CrypterTest
 
         private static void TestFile(string filename, Crypter crypter)
         {
-            using Stream stream = Assembly.GetEntryAssembly().GetManifestResourceStream(filename);
+            using Stream stream = Assembly.GetEntryAssembly()!.GetManifestResourceStream(filename)!;
             
             // Run test vectors.
             using StreamReader reader = new(stream);
             int startTime = Environment.TickCount;
 
             string line; int count = 0;
-            while ((line = reader.ReadLine()) != null)
+            while ((line = reader.ReadLine()!) is not null)
             {
                 string[] parts = line.Split(new[] { ',' }, 2);
                 if (parts.Length != 2) { continue; }

@@ -56,15 +56,12 @@ namespace CryptSharp.Core.Utility
         /// </summary>
         public static int BCryptLength { get { return Magic.Length * 4 - 1; } }
 
-        private BlowfishCipher(uint[] p, uint[][] s)
+        private BlowfishCipher(uint[]? p, uint[][]? s)
 		{
-            Clone(p ?? P0, s ?? S0);
-		}
-
-        private void Clone(uint[] p, uint[][] s)
-        {
-            P = (uint[])p.Clone();
-            S = new uint[][] { (uint[])s[0].Clone(), (uint[])s[1].Clone(), (uint[])s[2].Clone(), (uint[])s[3].Clone() };
+            var p1 = p ?? P0;
+            var s1 = s ?? S0;
+            P = (uint[])(p1 ?? P0).Clone();
+            S = new uint[][] { (uint[])s1[0].Clone(), (uint[])s1[1].Clone(), (uint[])s1[2].Clone(), (uint[])s1[3].Clone() };
         }
 
         /// <summary>
@@ -187,8 +184,8 @@ namespace CryptSharp.Core.Utility
         /// <returns>A BCrypt hash.</returns>
 		public byte[] BCrypt()
 		{
-            uint[] magicWords = null;
-            byte[] magicBytes = null;
+            uint[]? magicWords = null;
+            byte[]? magicBytes = null;
 
             try
             {
