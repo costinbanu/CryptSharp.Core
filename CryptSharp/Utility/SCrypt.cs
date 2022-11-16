@@ -180,7 +180,7 @@ namespace CryptSharp.Core.Utility
 
             int threadCount = Math.Max(1, Math.Min(Environment.ProcessorCount, Math.Min(maxThreads, parallel)));
             Thread[] threads = new Thread[threadCount - 1];
-            for (int i = 0; i < threads.Length; i++) { (threads[i] = new Thread(workerThread, 8192)).Start(); }
+            for (int i = 0; i < threads.Length; i++) { (threads[i] = new Thread(workerThread)).Start(); }
             workerThread();
             for (int i = 0; i < threads.Length; i++) { threads[i].Join(); }
         }
