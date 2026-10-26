@@ -13,7 +13,7 @@
 		<RepositoryUrl>https://github.com/costinbanu/CryptSharp.Core</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
 		<PackageProjectUrl>https://github.com/costinbanu/CryptSharp.Core</PackageProjectUrl>
-		<PackageReleaseNotes>Supporting net8</PackageReleaseNotes>
+		<PackageReleaseNotes>Supporting net10</PackageReleaseNotes>
 	</PropertyGroup>
 
 </Project>
